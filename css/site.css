@@ -1,0 +1,216 @@
+@media only screen and (max-width: 767px)
+{
+    .ui.container .ui.container
+    {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+}
+
+.masthead.segment
+{
+    padding-top: 8%;
+    text-align: center;
+}
+
+.masthead.segment h1
+{
+    font-size: 4em;
+}
+
+.masthead.segment h1 a
+{
+    color: #ffffff;
+}
+
+.masthead.segment h1 a:hover
+{
+    color: #ffffff;
+}
+
+.masthead.segment h2
+{
+    margin-bottom: 12%;
+}
+
+.masthead.segment h2 .subtitle
+{
+    display: inline-block;
+    margin-bottom: 0.5%;
+}
+
+
+@media only screen and (max-width: 767px)
+{
+    .masthead.segment h2
+    {
+        font-size: 18px;
+        font-weight: 700;
+    }
+}
+
+@media only screen and (max-width: 414px)
+{
+    .masthead.segment h2
+    {
+        font-size: 1rem;
+        font-weight: 500;
+    }
+}
+
+.datum
+{
+    color: #cccccc;
+}
+
+.nav.segment
+{
+    margin-bottom: 5% !important;
+}
+
+pre {
+    margin: 0;
+    tab-size: 4;
+    -moz-tab-size: 4;
+}
+
+.code.icon
+{
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 0 7px;
+}
+
+@media only screen and (max-width: 767px)
+{
+    .code.icon
+    {
+        display: none
+    }
+}
+
+.nav .container
+{
+    position: relative;
+}
+
+.nav .code.icon
+{
+    position: absolute;
+    right: -4%;
+    top: 0.5em;
+}
+
+.content.container
+{
+    min-height: 595px;
+}
+
+.title
+{
+    position: relative;
+}
+
+.title i
+{
+    position: absolute;
+    top: 0;
+    right: 5px;
+}
+
+.router .image
+{
+    display: flex;
+    justify-content: center;
+    padding: 2%;
+}
+
+.scroll .left.rail
+{
+    width: 160px;
+}
+
+@media only screen and (max-width: 1199px)
+{
+    .scroll .left.rail
+    {
+        visibility: hidden;
+    }
+}
+
+.scroll .steps
+{
+    width: 150px;
+    margin-top: 1.5rem !important;
+    left: auto !important;
+}
+
+.scroll .steps .step
+{
+    cursor: pointer;
+}
+
+.scroll .vertical.segment
+{
+    padding-top: 0;
+}
+
+.scroll .pages
+{
+    min-height: 1500px;
+}
+
+.fade .options
+{
+    width: 384px;
+    margin: auto;
+}
+
+.fade .options button
+{
+    width: 170px;
+    margin: 10px;
+}
+
+.fade .text
+{
+    margin: 1% 20%;
+    font-size: x-large;
+}
+
+@media only screen and (max-width: 414px)
+{
+    .fade .options
+    {
+        width: 192px;
+    }
+
+    .fade .options button
+    {
+        display: block;
+    }
+
+    .fade .text
+    {
+        margin: 5% 10px
+    }
+}
+
+.fade .back
+{
+    margin-left: 2%;
+}
+
+.fade .blue
+{
+    background: blue;
+    width: 100%;
+    height: 30em;
+    margin-bottom: 10px;
+}
+
+.number
+{
+    min-height: 500px;
+    padding-top: 2rem;
+}
