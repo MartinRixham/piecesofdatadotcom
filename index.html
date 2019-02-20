@@ -11,8 +11,9 @@
     <link rel="stylesheet" type="text/css" href="node_modules/highlight.js-postbuild/styles/default.css">
     <link rel="stylesheet" type="text/css" href="css/site.css">
     <script src="node_modules/Datum/target/Datum.js"></script>
-    <script src="main-production.js"></script>
-    <script>navigator.serviceWorker.register("service-worker.js");</script>
+    <script src="node_modules/requirejs/require.js"></script>
+    <script src="main.js"></script>
+    <!-- <script>navigator.serviceWorker.register("service-worker.js");</script> -->
   </head>
   <body>
     <div class="ui inverted vertical masthead segment">
@@ -32,11 +33,11 @@
       <div class="ui container">
         <div class="ui four item menu">
           <a class="item" data-bind="router">Router</a>
-          <a class="item" data-bind="two">Two</a>
           <a class="item" data-bind="three">Fade</a>
           <a class="item" data-bind="scroll">Scroll</a>
+          <a class="item" data-bind="links">Code</a>
         </div>
-        <i class="code icon" data-bind="code"></i>
+        <i class="modal code icon" data-bind="code"></i>
       </div>
     </div>
     <div id="content" class="ui content container" data-bind="content">
