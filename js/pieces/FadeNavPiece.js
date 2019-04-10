@@ -1,4 +1,12 @@
-define(["./Route", "./Placeholder"], function FadeNavPiece(Route, Placeholder) {
+define([
+	"./Library",
+	"./Route",
+	"./Placeholder"
+],
+function FadeNavPiece(
+	Library,
+	Route,
+	Placeholder) {
 
 	var route = new Route();
 
@@ -6,9 +14,9 @@ define(["./Route", "./Placeholder"], function FadeNavPiece(Route, Placeholder) {
 
 		var self = this;
 
-		var currentIndex = new Datum(0);
+		var currentIndex = new Library.Datum(0);
 
-		var activeIndex = new Datum(-1);
+		var activeIndex = new Library.Datum(-1);
 
 		var routeIndex = -1;
 
@@ -127,7 +135,7 @@ define(["./Route", "./Placeholder"], function FadeNavPiece(Route, Placeholder) {
 			var children = element.children;
 			var oldPage = new Array(children.length);
 
-			for(var i = children.length - 1; i >= 0; i--) {
+			for (var i = children.length - 1; i >= 0; i--) {
 
 				oldPage[i] = children[i];
 				element.removeChild(children[i]);
