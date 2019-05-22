@@ -52,7 +52,7 @@ define([], function() {
 
 		this.update = function(index) {
 
-			var route = routes[index].get();
+			var route = (routes[index] && routes[index].get()) || "";
 
 			if (updating > 0) {
 
