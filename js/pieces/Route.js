@@ -23,10 +23,12 @@ define([], function() {
 
 			if (words[i] != newWords[i]) {
 
-				routes.splice(i + 1);
-
 				updating++;
-				routes[i].set(newWords[i] || "", i);
+
+				if (routes[i].set(newWords[i], i)) {
+
+					routes.splice(i + 1);
+				}
 
 				words = newWords;
 
@@ -52,7 +54,7 @@ define([], function() {
 
 		this.update = function(index) {
 
-			var route = (routes[index] && routes[index].get()) || "";
+			var route = routes[index].get();
 
 			if (updating > 0) {
 
