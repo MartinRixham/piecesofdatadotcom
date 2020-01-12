@@ -17,27 +17,30 @@ define([], function() {
 			return;
 		}
 
-		var newWords = location.hash.substring(1).split("/");
+		words = location.hash.substring(1).split("/");
 
-		for (var i = 0; i < routes.length; i++) {
+		for (var i = 0; i < words.length; i++) {
 
-			if (words[i] != newWords[i]) {
-
-				updating++;
-
-				if (routes[i].set(newWords[i], i)) {
-
-					routes.splice(i + 1);
-				}
-
-				words = newWords;
+			if (!routes[i]) {
 
 				return;
 			}
+
+			updating++;
+
+			routes[i].set(words[i], i, function() {
+
+				routes.splice(i + 1);
+			});
 		}
 	});
 
 	function Route() {
+
+		this.setUpdating = function() {
+
+			updating++;
+		};
 
 		this.addRoute = function(word) {
 
@@ -47,7 +50,7 @@ define([], function() {
 
 			updating++;
 
-			word.set(words[index], index);
+			word.set(words[index], index, function() {});
 
 			return index;
 		};
