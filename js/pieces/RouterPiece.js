@@ -1,14 +1,22 @@
 define(["./Library", "./Route"], function RouterPiece(Library, Route) {
 
-	var route = new Route();
-
 	function RouterPiece(page) {
 
 		this.page = page;
 
-		var routeIndex = -1;
+		var router;
+
+		var initialised;
 
 		this.onBind = function(element) {
+
+			initialised = false;
+
+			var event = document.createEvent("Event");
+			event.initEvent("__PIECES_BIND__", true, true);
+			element.dispatchEvent(event);
+
+			var route = Route.get();
 
 			while (element.firstChild) {
 
@@ -25,7 +33,7 @@ define(["./Library", "./Route"], function RouterPiece(Library, Route) {
 			element.appendChild(hidden);
 			element.appendChild(container);
 
-			routeIndex = registerRoute();
+			router = registerRoute(route);
 		};
 
 		this.route =
@@ -33,15 +41,16 @@ define(["./Library", "./Route"], function RouterPiece(Library, Route) {
 
 				init: function() {
 
-					route.setUpdating();
+					router.setUpdating();
 				},
 				update: function() {
 
-					route.update(routeIndex);
+					router.update();
+					initialised = true;
 				}
 			});
 
-		function registerRoute() {
+		function registerRoute(route) {
 
 			var word;
 
@@ -53,7 +62,11 @@ define(["./Library", "./Route"], function RouterPiece(Library, Route) {
 
 						callback();
 						page.route(word && decodeURIComponent(word));
-						route.update(routeIndex);
+
+						if (!initialised) {
+
+							route.update(routeIndex);
+						}
 					},
 					get: function() {
 
@@ -69,7 +82,11 @@ define(["./Library", "./Route"], function RouterPiece(Library, Route) {
 
 						callback();
 						page.route = word && decodeURIComponent(word);
-						route.update(routeIndex);
+
+						if (!initialised) {
+
+							route.update(routeIndex);
+						}
 					},
 					get: function() {
 

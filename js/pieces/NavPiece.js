@@ -1,20 +1,24 @@
 define(["./Library", "./Route"], function NavPiece(Library, Route) {
 
-	var route = new Route();
-
 	function NavPiece(pages) {
 
 		var self = this;
 
-		var currentIndex = new Library.Datum(0);
+		var currentIndex = 0;
 
 		var activeIndex = new Library.Datum(-1);
 
-		var routeIndex = -1;
+		var router;
 
 		this.currentPage = pages[0].page;
 
 		this.onBind = function(element) {
+
+			var event = document.createEvent("Event");
+			event.initEvent("__PIECES_BIND__", true, true);
+			element.dispatchEvent(event);
+
+			var route = Route.get();
 
 			while (element.firstChild) {
 
@@ -28,7 +32,7 @@ define(["./Library", "./Route"], function NavPiece(Library, Route) {
 
 			element.appendChild(page);
 
-			routeIndex =
+			router =
 				route.addRoute({
 
 					set: function(word, routeIndex, callback) {
@@ -38,7 +42,7 @@ define(["./Library", "./Route"], function NavPiece(Library, Route) {
 					},
 					get: function() {
 
-						return pages[currentIndex()].route;
+						return pages[currentIndex].route;
 					}
 				});
 		};
@@ -71,7 +75,7 @@ define(["./Library", "./Route"], function NavPiece(Library, Route) {
 
 			callback();
 			self.currentPage = pages[index].page;
-			currentIndex(index);
+			currentIndex = index;
 		}
 
 		this.showPage = function(index) {
@@ -83,16 +87,16 @@ define(["./Library", "./Route"], function NavPiece(Library, Route) {
 
 			activeIndex(index);
 
-			var oldIndex = currentIndex();
+			var oldIndex = currentIndex;
 
 			if (oldIndex != index) {
 
-				route.changePage(routeIndex);
+				router.changePage();
 			}
 
-			currentIndex(index);
+			currentIndex = index;
 
-			route.update(routeIndex);
+			router.update();
 
 			this.currentPage = pages[index].page;
 		};

@@ -2,36 +2,37 @@ define([
 	"jquery",
 	"js/pieces/ScrollNavPiece",
 	"js/pieces/NavButton",
-	"js/scroll/One",
-	"js/scroll/Two",
-	"js/scroll/Three",
-	"js/scroll/Four",
+	"js/Cities",
+	"js/Rainbow",
+	"js/Space",
+	"js/Vegetables",
 	"js/Code"
 ],
 function(
 	$,
 	ScrollNavPiece,
 	NavButton,
-	One,
-	Two,
-	Three,
-	Four,
+	Cities,
+	Rainbow,
+	Space,
+	Vegetables,
 	Code) {
 
 	function Scroll() {
 
 		this.onBind = function(element) {
 
-			$(element).load("html/scroll/scroll.html");
+			$(element).load("html/scroll.html");
 		};
 
 		// Create scroll navigation container.
 		this.container =
 			new ScrollNavPiece([
-				{ route: "one", page: new One() },
-				{ route: "two", page: new Two() },
-				{ route: "three", page: new Three() },
-				{ route: "four", page: new Four() }
+
+				{ route: "cities", page: new Cities() },
+				{ route: "rainbow", page: new Rainbow() },
+				{ route: "vegetables", page: new Vegetables() },
+				{ route: "space", page: new Space() }
 			]);
 
 		// Menu buttons.
@@ -48,7 +49,7 @@ function(
 				$(element).sticky();
 			});
 
-		this.code = new Code("scroll/Scroll.js");
+		this.code = new Code("Scroll.js");
 	}
 
 	return Scroll;

@@ -8,7 +8,9 @@ define([], function() {
 
 	var updating = 0;
 
-	window.addEventListener("hashchange", function() {
+	var route = new Route();
+
+	addEventListener("hashchange", function() {
 
 		if (changedHash) {
 
@@ -37,6 +39,8 @@ define([], function() {
 
 	function Route() {
 
+		var self = this;
+
 		this.setUpdating = function() {
 
 			updating++;
@@ -52,12 +56,36 @@ define([], function() {
 
 			word.set(words[index], index, function() {});
 
-			return index;
+			return {
+
+				setUpdating: function() {
+
+					self.setUpdating(index);
+				},
+				changePage: function() {
+
+					self.changePage(index);
+				},
+				update: function() {
+
+					self.update(index);
+				},
+				getIndex: function() {
+
+					return index;
+				}
+			};
 		};
 
 		this.update = function(index) {
 
-			var route = routes[index].get();
+			var words = [];
+			var maxIndex = Math.min(routes.length, index + 1);
+
+			for (var i = 0; i < maxIndex; i++) {
+
+				words[i] = routes[i].get();
+			}
 
 			if (updating > 0) {
 
@@ -65,15 +93,6 @@ define([], function() {
 
 				return;
 			}
-
-			words.splice(index);
-
-			for (var i = words.length; i < index; i++) {
-
-				words[i] = "";
-			}
-
-			words[index] = route;
 
 			var oldHash = location.hash;
 			var hash = words.join("/");
@@ -92,16 +111,21 @@ define([], function() {
 		this.changePage = function(index) {
 
 			routes.splice(index + 1);
+			words.splice(index + 1);
 		};
+	}
 
-		this.reset = function() {
+	return {
+
+		get: function() { return route; },
+		set: function(newRoute) { route = newRoute; },
+		reset: function() {
 
 			routes = [];
 			words = location.hash.substring(1).split("/");
 			changedHash = false;
 			updating = 0;
-		};
-	}
-
-	return Route;
+			route = new Route();
+		}
+	};
 });

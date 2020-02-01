@@ -8,13 +8,11 @@ function SlideNavPiece(
 	Placeholder,
 	Route) {
 
-	var route = new Route();
-
 	function SlideNavPiece(pages) {
 
 		var self = this;
 
-		var currentIndex = new Library.Datum(0);
+		var currentIndex = 0;
 
 		var activeIndex = new Library.Datum(-1);
 
@@ -24,13 +22,19 @@ function SlideNavPiece(
 
 		var slideRef = {};
 
-		var routeIndex = -1;
+		var router;
 
 		this.firstPage = pages[0].page;
 
 		this.secondPage = null;
 
 		this.onBind = function(element) {
+
+			var event = document.createEvent("Event");
+			event.initEvent("__PIECES_BIND__", true, true);
+			element.dispatchEvent(event);
+
+			var route = Route.get();
 
 			while (element.firstChild) {
 
@@ -43,7 +47,7 @@ function SlideNavPiece(
 			container = document.createElement("DIV");
 			container.style.width = "200%";
 			container.style.position = "relative";
-			container.style.left = "0";
+			container.style.left = this.secondPage ? "-100%" : "0";
 
 			var firstElement = document.createElement("DIV");
 			firstElement.dataset.bind = "firstPage";
@@ -61,7 +65,7 @@ function SlideNavPiece(
 
 			element.appendChild(container);
 
-			routeIndex =
+			router =
 				route.addRoute({
 
 					set: function(word, routeIndex, callback) {
@@ -71,7 +75,7 @@ function SlideNavPiece(
 					},
 					get: function() {
 
-						return pages[currentIndex()].route;
+						return pages[currentIndex].route;
 					}
 				});
 		};
@@ -108,7 +112,7 @@ function SlideNavPiece(
 
 			self.firstPage = pages[index].page;
 			self.secondPage = null;
-			currentIndex(index);
+			currentIndex = index;
 
 			if (container) {
 
@@ -126,16 +130,16 @@ function SlideNavPiece(
 
 			activeIndex(index);
 
-			var oldIndex = currentIndex();
+			var oldIndex = currentIndex;
 
 			if (oldIndex != index) {
 
-				route.changePage(routeIndex);
+				router.changePage();
 			}
 
-			currentIndex(index);
+			currentIndex = index;
 
-			route.update(routeIndex);
+			router.update();
 
 			var ref = {};
 			slideRef = ref;
@@ -147,13 +151,9 @@ function SlideNavPiece(
 				container.style.removeProperty("transition");
 				container.style.left = "0";
 
-				if (!right) {
+				oldPage = getOldPage(right ? 0 : 1);
 
-					oldPage = getOldPage(1);
-
-					this.firstPage = new Placeholder(oldPage);
-				}
-
+				this.firstPage = new Placeholder(oldPage);
 				this.secondPage = pages[index].page;
 
 				right = false;
@@ -170,20 +170,16 @@ function SlideNavPiece(
 							self.firstPage = null;
 						}
 					}, 500);
-				});
+				}, 10);
 			}
 			else if (index < oldIndex) {
 
 				container.style.removeProperty("transition");
 				container.style.left = "-100%";
 
-				if (right) {
+				oldPage = getOldPage(right ? 0 : 1);
 
-					oldPage = getOldPage(0);
-
-					this.secondPage = new Placeholder(oldPage);
-				}
-
+				this.secondPage = new Placeholder(oldPage);
 				this.firstPage = pages[index].page;
 
 				right = true;
@@ -200,7 +196,7 @@ function SlideNavPiece(
 							self.secondPage = null;
 						}
 					}, 500);
-				});
+				}, 10);
 			}
 		};
 

@@ -39,7 +39,6 @@
     margin-bottom: 0.5%;
 }
 
-
 @media only screen and (max-width: 767px)
 {
     .masthead.segment h2
@@ -160,10 +159,128 @@ pre {
     min-height: 1500px;
 }
 
+.scroll .pages
+{
+    min-height: 2500px;
+}
+
 .scroll .number
 {
     min-height: 500px;
     padding-top: 2rem;
+}
+
+@media only screen and (max-width: 767px)
+{
+    .scroll .pages
+    {
+        min-height: 2000px;
+    }
+
+    .scroll .number
+    {
+        min-height: 400px;
+    }
+}
+
+@media only screen and (max-width: 414px)
+{
+    .scroll .pages
+    {
+            min-height: 1500px;
+    }
+
+    .scroll .number
+    {
+        min-height: 300px;
+    }
+}
+
+.cities
+{
+    position: relative;
+}
+
+.cities .back, .cities .forward
+{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    font-size: xx-large;
+    cursor: pointer;
+}
+
+.cities .back
+{
+    left: 0;
+}
+
+.cities .forward
+{
+    right: 0;
+}
+
+.cities .chevron
+{
+    position: absolute;
+    top: 44%;
+}
+
+.cities .back .chevron
+{
+    left: 2%;
+}
+
+.cities .forward .chevron
+{
+    right: 2%;
+}
+
+.rainbow .stripe
+{
+    height: 10vw;
+    max-height: 70px;
+}
+
+.rainbow .red
+{
+    background: red;
+}
+
+.rainbow .orange
+{
+    background: orange;
+}
+
+.rainbow .yellow
+{
+    background: yellow;
+}
+
+.rainbow .green
+{
+    background: green;
+}
+
+.rainbow .blue
+{
+    background: blue;
+}
+
+.rainbow .purple
+{
+    background: purple;
+}
+
+.vegetables
+{
+    cursor: pointer;
+}
+
+.picture img
+{
+    width: 100%;
 }
 
 .fade .options
@@ -182,6 +299,14 @@ pre {
 {
     margin: 1% 20%;
     font-size: x-large;
+}
+
+@media only screen and (max-width: 767px)
+{
+    .fade .text
+    {
+        margin: 2% 10%
+    }
 }
 
 @media only screen and (max-width: 414px)
