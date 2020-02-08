@@ -119,14 +119,7 @@ define([
 
 				if (pages[i].route == hash) {
 
-					var child = container.children[i];
-
-					if (child) {
-
-						moved = true;
-
-						child.scrollIntoView();
-					}
+					scrollTo(i);
 
 					activeIndex(i);
 					currentIndex = i;
@@ -146,6 +139,21 @@ define([
 			activeIndex(0);
 			currentIndex = -1;
 			subroute.setIndex(0);
+		}
+
+		function scrollTo(index) {
+
+			setTimeout(function() {
+
+				var child = container.children[index];
+
+				if (child) {
+
+					moved = true;
+
+					child.scrollIntoView();
+				}
+			});
 		}
 
 		this.hidden =

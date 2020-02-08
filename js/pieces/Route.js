@@ -73,6 +73,10 @@ define([], function() {
 				getIndex: function() {
 
 					return index;
+				},
+				getWord: function() {
+
+					return words[index];
 				}
 			};
 		};
@@ -98,7 +102,7 @@ define([], function() {
 			var hash = words.join("/");
 
 			// remove trailing slashes.
-			hash = hash.replace(/\/+$/, "");
+			hash = "#" + hash.replace(/\/+$/, "");
 
 			if (oldHash != hash) {
 
@@ -112,6 +116,11 @@ define([], function() {
 
 			routes.splice(index + 1);
 			words.splice(index + 1);
+		};
+
+		this.getWord = function(index) {
+
+			return words[index];
 		};
 	}
 

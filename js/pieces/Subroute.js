@@ -35,8 +35,8 @@ define(["./CompoundWord"], function(CompoundWord) {
 			}
 
 			var newWord = new CompoundWord(currentIndex);
-			var router = route.addRoute(newWord);
 			var newIndex = words.length;
+			var router = route.addRoute(newWord);
 
 			words[newIndex] = newWord;
 			words[newIndex].setRouter(router);
@@ -79,6 +79,10 @@ define(["./CompoundWord"], function(CompoundWord) {
 				getIndex: function() {
 
 					return router.getIndex();
+				},
+				getWord: function() {
+
+					return router.getWord();
 				}
 			};
 		}
