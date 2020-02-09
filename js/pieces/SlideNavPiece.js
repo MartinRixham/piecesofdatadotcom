@@ -12,7 +12,7 @@ function SlideNavPiece(
 
 		var self = this;
 
-		var currentIndex = 0;
+		var currentIndex = -1;
 
 		var activeIndex = new Library.Datum(-1);
 
@@ -73,9 +73,20 @@ function SlideNavPiece(
 						routePage(word, callback);
 						route.update(routeIndex);
 					},
-					get: function() {
+					get: function(nonBlank) {
 
-						return pages[currentIndex].route;
+						if (nonBlank && currentIndex < 0) {
+
+							return pages[0].route;
+						}
+						else if (pages[currentIndex]) {
+
+							return pages[currentIndex].route;
+						}
+						else {
+
+							return "";
+						}
 					}
 				});
 		};
@@ -86,6 +97,7 @@ function SlideNavPiece(
 
 				if (pages[i].route == hash) {
 
+					currentIndex = i;
 					activeIndex(i);
 
 					showPage(i, callback);
@@ -94,6 +106,7 @@ function SlideNavPiece(
 				}
 			}
 
+			currentIndex = -1;
 			activeIndex(-1);
 
 			showPage(0, callback);
@@ -112,7 +125,6 @@ function SlideNavPiece(
 
 			self.firstPage = pages[index].page;
 			self.secondPage = null;
-			currentIndex = index;
 
 			if (container) {
 
@@ -128,16 +140,15 @@ function SlideNavPiece(
 				return;
 			}
 
-			activeIndex(index);
+			var oldIndex = Math.max(currentIndex, 0);
 
-			var oldIndex = currentIndex;
+			currentIndex = index;
+			activeIndex(index);
 
 			if (oldIndex != index) {
 
 				router.changePage();
 			}
-
-			currentIndex = index;
 
 			router.update();
 

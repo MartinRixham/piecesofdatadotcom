@@ -34,9 +34,9 @@ define([
 
 		var route;
 
-		var activeIndex = new Library.Datum(0);
-
 		var currentIndex = -1;
+
+		var activeIndex = new Library.Datum(-1);
 
 		var container;
 
@@ -99,9 +99,13 @@ define([
 						routePage(word);
 						route.update(routeIndex);
 					},
-					get: function() {
+					get: function(nonBlank) {
 
-						if (currentIndex >= 0) {
+						if (nonBlank && currentIndex < 0) {
+
+							return pages[0].route;
+						}
+						else if (pages[currentIndex]) {
 
 							return pages[currentIndex].route;
 						}
@@ -119,10 +123,11 @@ define([
 
 				if (pages[i].route == hash) {
 
-					scrollTo(i);
+					eventuallyScroll(i, 1);
 
-					activeIndex(i);
 					currentIndex = i;
+					activeIndex(i);
+
 					subroute.setIndex(i);
 
 					return;
@@ -136,24 +141,46 @@ define([
 				scrollTo(0, 0);
 			}
 
-			activeIndex(0);
 			currentIndex = -1;
+			activeIndex(-1);
+
 			subroute.setIndex(0);
 		}
 
-		function scrollTo(index) {
+		function eventuallyScroll(index, wait) {
 
-			setTimeout(function() {
+			var child = container.children[index];
 
-				var child = container.children[index];
+			if (child && child.getBoundingClientRect().height) {
 
-				if (child) {
+				moved = true;
 
-					moved = true;
+				currentIndex = index;
+				activeIndex(index);
 
-					child.scrollIntoView();
-				}
-			});
+				child.scrollIntoView();
+			}
+			else if (wait < 1000) {
+
+				setTimeout(function() {
+
+					eventuallyScroll(index, wait * 2);
+				}, wait);
+			}
+			else if (child) {
+
+				moved = true;
+
+				currentIndex = index;
+				activeIndex(index);
+
+				child.scrollIntoView();
+			}
+			else {
+
+				currentIndex = index;
+				activeIndex(index);
+			}
 		}
 
 		this.hidden =
@@ -197,15 +224,17 @@ define([
 			if (found) {
 
 				currentIndex = index;
+				activeIndex(index);
+
 				subroute.setIndex(index);
 			}
 			else {
 
 				currentIndex = -1;
+				activeIndex(-1);
+
 				subroute.setIndex(0);
 			}
-
-			activeIndex(index);
 
 			if (oldIndex != currentIndex) {
 
@@ -218,8 +247,6 @@ define([
 			var child = container.children[index];
 
 			if (child) {
-
-				moved = true;
 
 				child.scrollIntoView({ behavior: "smooth", block: "start" });
 			}
