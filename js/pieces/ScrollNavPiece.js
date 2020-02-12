@@ -9,11 +9,18 @@ define([
 	Subroute,
 	Page) {
 
+	var initialised = false;
+
 	var moved = false;
 
 	var scrolls = [];
 
 	function scroll() {
+
+		if (!initialised) {
+
+			return;
+		}
 
 		if (moved) {
 
@@ -128,8 +135,6 @@ define([
 					currentIndex = i;
 					activeIndex(i);
 
-					subroute.setIndex(i);
-
 					return;
 				}
 			}
@@ -141,10 +146,9 @@ define([
 				scrollTo(0, 0);
 			}
 
+			initialised = true;
 			currentIndex = -1;
 			activeIndex(-1);
-
-			subroute.setIndex(0);
 		}
 
 		function eventuallyScroll(index, wait) {
@@ -154,6 +158,7 @@ define([
 			if (child && child.getBoundingClientRect().height) {
 
 				moved = true;
+				initialised = true;
 
 				currentIndex = index;
 				activeIndex(index);
@@ -170,6 +175,7 @@ define([
 			else if (child) {
 
 				moved = true;
+				initialised = true;
 
 				currentIndex = index;
 				activeIndex(index);
@@ -177,6 +183,8 @@ define([
 				child.scrollIntoView();
 			}
 			else {
+
+				initialised = true;
 
 				currentIndex = index;
 				activeIndex(index);
@@ -225,15 +233,11 @@ define([
 
 				currentIndex = index;
 				activeIndex(index);
-
-				subroute.setIndex(index);
 			}
 			else {
 
 				currentIndex = -1;
 				activeIndex(-1);
-
-				subroute.setIndex(0);
 			}
 
 			if (oldIndex != currentIndex) {
@@ -247,6 +251,8 @@ define([
 			var child = container.children[index];
 
 			if (child) {
+
+				initialised = true;
 
 				child.scrollIntoView({ behavior: "smooth", block: "start" });
 			}

@@ -1,36 +1,42 @@
 define(["./Library"], function() {
 
-	function CompoundWord(i) {
+	function CompoundWord(getCurrentIndex) {
 
 		var words = [];
 
-		var index = i;
-
 		var router;
 
-		this.get = function(nonBlank) {
+		this.get = function(nonBlank, reference) {
 
-			if (words[index]) {
+			var word = "";
 
-				return words[index].get(nonBlank);
+			for (var i = 0; i < words.length; i++) {
+
+				if (words[i]) {
+
+					var got = words[i].get(nonBlank, reference);
+
+					if (getCurrentIndex() == i) {
+
+						word = got;
+					}
+				}
 			}
-			else {
 
-				return "";
-			}
+			return word;
 		};
 
 		this.set = function(word, routeIndex, callback) {
 
-			if (words[index]) {
+			if (words[getCurrentIndex()]) {
 
-				words[index].set(word, routeIndex, callback);
+				words[getCurrentIndex()].set(word, routeIndex, callback);
 			}
 		};
 
-		this.add = function(index, word) {
+		this.add = function(i, word) {
 
-			words[index] = word;
+			words[i] = word;
 
 			word.set(router.getWord(), router.getIndex(), function() {});
 		};
@@ -38,11 +44,6 @@ define(["./Library"], function() {
 		this.hasIndex = function(i) {
 
 			return !!words[i];
-		};
-
-		this.setIndex = function(i) {
-
-			index = i;
 		};
 
 		this.setRouter = function(r) {

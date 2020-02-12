@@ -6,8 +6,6 @@ define(["./CompoundWord"], function(CompoundWord) {
 
 		var scrollIndex = -1;
 
-		var currentIndex = 0;
-
 		this.setUpdating = function() {
 
 			route.setUpdating();
@@ -28,13 +26,14 @@ define(["./CompoundWord"], function(CompoundWord) {
 
 				if (!words[i].hasIndex(index)) {
 
+					words[i].getRouter().setUpdating();
 					words[i].add(index, word);
 
-					return getRouter(words[i].getRouter(), index, this.setIndex, simple);
+					return getRouter(words[i].getRouter(), index, simple);
 				}
 			}
 
-			var newWord = new CompoundWord(currentIndex);
+			var newWord = new CompoundWord(getCurrentIndex);
 			var newIndex = words.length;
 			var router = route.addRoute(newWord);
 
@@ -42,10 +41,10 @@ define(["./CompoundWord"], function(CompoundWord) {
 			words[newIndex].setRouter(router);
 			words[newIndex].add(index, word);
 
-			return getRouter(router, index, this.setIndex, simple);
+			return getRouter(router, index, simple);
 		};
 
-		function getRouter(router, index, setIndex, simple) {
+		function getRouter(router, index, simple) {
 
 			if (simple) {
 
@@ -62,19 +61,18 @@ define(["./CompoundWord"], function(CompoundWord) {
 
 					router.changePage();
 				},
-				update: function() {
+				update: function(reference) {
 
-					if (getCurrentIndex() == index) {
+					if (getCurrentIndex() != index) {
 
-						router.update();
-					}
-					else {
+						router.setUpdating();
 
-						setIndex(index);
 						showPage(index);
 
-						eventuallyUpdate(router, index, 100);
+						eventuallyUpdate(router, index, 100, reference);
 					}
+
+					router.update(reference);
 				},
 				getIndex: function() {
 
@@ -87,13 +85,13 @@ define(["./CompoundWord"], function(CompoundWord) {
 			};
 		}
 
-		function eventuallyUpdate(router, index, retry) {
+		function eventuallyUpdate(router, index, retry, reference) {
 
 			if (getCurrentIndex() == index) {
 
 				setTimeout(function() {
 
-					router.update();
+					router.update(reference);
 				}, 50);
 			}
 			else if (retry) {
@@ -118,16 +116,6 @@ define(["./CompoundWord"], function(CompoundWord) {
 		this.callHome = function(index) {
 
 			scrollIndex = index;
-		};
-
-		this.setIndex = function(index) {
-
-			currentIndex = index;
-
-			for (var i = 0; i < words.length; i++) {
-
-				words[i].setIndex(index);
-			}
 		};
 	}
 
