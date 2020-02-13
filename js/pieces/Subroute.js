@@ -98,7 +98,7 @@ define(["./CompoundWord"], function(CompoundWord) {
 
 				setTimeout(function() {
 
-					eventuallyUpdate(router, index, --retry);
+					eventuallyUpdate(router, index, --retry, reference);
 				}, 10);
 			}
 		}
@@ -110,7 +110,10 @@ define(["./CompoundWord"], function(CompoundWord) {
 
 		this.changePage = function(index) {
 
-			route.changePage(index);
+			for (var i = index + 1; i < words.length; i++) {
+
+				words[i].remove(getCurrentIndex());
+			}
 		};
 
 		this.callHome = function(index) {
