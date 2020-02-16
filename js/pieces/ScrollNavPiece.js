@@ -9,18 +9,13 @@ define([
 	Subroute,
 	Page) {
 
-	var initialised = false;
-
 	var moved = false;
 
 	var scrolls = [];
 
+	var highestIndex = -1;
+
 	function scroll() {
-
-		if (!initialised) {
-
-			return;
-		}
 
 		if (moved) {
 
@@ -38,6 +33,8 @@ define([
 	addEventListener("scroll", scroll);
 
 	function ScrollNavPiece(pages) {
+
+		var initialised = false;
 
 		var route;
 
@@ -103,7 +100,7 @@ define([
 
 					set: function(word, routeIndex) {
 
-						routePage(word);
+						routePage(word, routeIndex);
 						route.update(routeIndex);
 					},
 					get: function(nonBlank) {
@@ -124,13 +121,15 @@ define([
 				}, true);
 		};
 
-		function routePage(hash) {
+		function routePage(hash, routeIndex) {
 
 			for (var i = 0; i < pages.length; i++) {
 
 				if (pages[i].route == hash) {
 
-					eventuallyScroll(i, 1);
+					highestIndex = Math.max(highestIndex, routeIndex);
+
+					eventuallyScroll(i, routeIndex, 100);
 
 					currentIndex = i;
 					activeIndex(i);
@@ -151,44 +150,53 @@ define([
 			activeIndex(-1);
 		}
 
-		function eventuallyScroll(index, wait) {
+		function eventuallyScroll(index, routeIndex, retry) {
 
 			var child = container.children[index];
 
-			if (child && child.getBoundingClientRect().height) {
+			if (highestIndex > routeIndex) {
 
+				initialise(index);
+			}
+			else if (child && child.getBoundingClientRect().height) {
+
+				initialise(index);
+
+				highestIndex = -1;
 				moved = true;
-				initialised = true;
-
-				currentIndex = index;
-				activeIndex(index);
 
 				child.scrollIntoView();
 			}
-			else if (wait < 1000) {
+			else if (retry) {
 
 				setTimeout(function() {
 
-					eventuallyScroll(index, wait * 2);
-				}, wait);
+					eventuallyScroll(index, routeIndex, --retry);
+				}, 10);
 			}
 			else if (child) {
 
-				moved = true;
-				initialised = true;
+				initialise(index);
 
-				currentIndex = index;
-				activeIndex(index);
+				highestIndex = -1;
+				moved = true;
 
 				child.scrollIntoView();
 			}
 			else {
 
-				initialised = true;
+				initialise(index);
 
-				currentIndex = index;
-				activeIndex(index);
+				highestIndex = -1;
 			}
+		}
+
+		function initialise(index) {
+
+			initialised = true;
+
+			currentIndex = index;
+			activeIndex(index);
 		}
 
 		this.hidden =
@@ -207,6 +215,11 @@ define([
 			});
 
 		function scroll() {
+
+			if (!initialised) {
+
+				return;
+			}
 
 			var children = container.children;
 
@@ -248,11 +261,14 @@ define([
 
 		this.showPage = function(index) {
 
+			if (!initialised) {
+
+				return;
+			}
+
 			var child = container.children[index];
 
 			if (child) {
-
-				initialised = true;
 
 				child.scrollIntoView({ behavior: "smooth", block: "start" });
 			}
